@@ -1,4 +1,4 @@
-# data-edge-refactor
+# Data-edge-refactor
 
 EGA is one of the principle Archive resources that distributes data to the researchers. Our data distribution is made through HTTP, ASPERA and API REST HTTP. During the last couple of years we’ve seen an increase in the amount of data that the archive transfers to researchers in excess of 2PiB per year.
 
