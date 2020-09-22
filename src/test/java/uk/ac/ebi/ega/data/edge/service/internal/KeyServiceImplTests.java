@@ -6,10 +6,13 @@ import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import uk.ac.ebi.ega.data.edge.commons.exception.FileNotFoundException;
@@ -20,7 +23,9 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = KeyServiceImplTests.Configuration.class,
+        loader = AnnotationConfigContextLoader.class)
 public class KeyServiceImplTests {
 
     private static MockWebServer mockWebServer;
@@ -41,18 +46,20 @@ public class KeyServiceImplTests {
 
     @TestConfiguration
     public static class Configuration {
+
         @Bean
-        public WebClient keyServiceWebClient() {
+        public KeyService keyService() {
             String baseUrl = String.format("http://localhost:%s", mockWebServer.getPort());
-            return WebClient.create(baseUrl);
+            return new KeyServiceImpl(WebClient.create(baseUrl));
         }
+
     }
 
     @Test
     void getEncryptionAlgorithm_validFileId_returnsEncryptionAlgorithmName() throws InterruptedException {
         mockWebServer.enqueue(new MockResponse()
-            .setBody("test-algorithm")
-            .addHeader("Content-Type", "application/json"));
+                .setBody("test-algorithm")
+                .addHeader("Content-Type", "application/json"));
 
         assertEquals("test-algorithm", keyService.getEncryptionAlgorithm("test-file"));
 

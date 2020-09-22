@@ -31,9 +31,6 @@ import uk.ac.ebi.ega.data.edge.commons.shared.dto.File;
 import uk.ac.ebi.ega.data.edge.commons.shared.dto.FileDataset;
 import uk.ac.ebi.ega.data.edge.service.FileMetaService;
 
-
-@Service
-//@EnableDiscoveryClient
 public class RemoteFileMetaServiceImpl implements FileMetaService {
     private final WebClient fileDatabaseClient;
 
