@@ -52,8 +52,8 @@ public class MainControllerTests {
         details.setPassword("egarocks");
 
         // Totally stolen from pyega3
-        details.setClientId("f20cd2d3-682a-4568-a53e-4262ef54c8f4");
-        details.setClientSecret("AMenuDLjVdVo4BSwi0QD54LL6NeVDEZRzEQUJ7hJOM3g4imDZBHHX0hNfKHPeQIGkskhtCmqAJtt_jm7EKq-rWw");
+        details.setClientId("");
+        details.setClientSecret("");
 
         details.setGrantType("password");
         details.setScope(List.of("openid"));
