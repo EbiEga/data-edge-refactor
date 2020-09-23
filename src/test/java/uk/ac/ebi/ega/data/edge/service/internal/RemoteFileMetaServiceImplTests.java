@@ -8,6 +8,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -16,6 +17,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 import org.springframework.web.reactive.function.client.WebClient;
 import uk.ac.ebi.ega.data.edge.commons.shared.dto.File;
 import uk.ac.ebi.ega.data.edge.commons.shared.dto.FileDataset;
@@ -27,7 +31,9 @@ import java.util.HashSet;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = RemoteFileMetaServiceImplTests.Configuration.class,
+        loader = AnnotationConfigContextLoader.class)
 public class RemoteFileMetaServiceImplTests {
     public static final File TEST_FILE = new File("test-file",
             new HashSet<String>(),
@@ -59,9 +65,9 @@ public class RemoteFileMetaServiceImplTests {
     @TestConfiguration
     public static class Configuration {
         @Bean
-        public WebClient fileMetaServiceWebClient() {
+        public FileMetaService fileMetaService() {
             String baseUrl = String.format("http://localhost:%s", mockWebServer.getPort());
-            return WebClient.create(baseUrl);
+            return new RemoteFileMetaServiceImpl(WebClient.create(baseUrl));
         }
     }
 

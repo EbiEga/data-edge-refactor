@@ -23,8 +23,8 @@ import uk.ac.ebi.ega.data.edge.commons.exception.FileNotFoundException;
 import uk.ac.ebi.ega.data.edge.service.KeyService;
 import org.springframework.stereotype.Service;
 
-@Service
 public class KeyServiceImpl implements KeyService{
+
     private WebClient keyService;
 
     public KeyServiceImpl(WebClient keyService) {
